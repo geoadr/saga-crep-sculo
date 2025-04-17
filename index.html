@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saga Crepúsculo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Comic+Sans+MS&display=swap');
+
+    body {
+      font-family: 'Cinzel', serif, 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #000000, #4b0f1f);
+      overflow-x: hidden;
+      color: #ffffff;
+      transition: all 0.5s ease;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(255, 0, 77, 0.3);
+      text-align: center;
+      margin-top: 20px;
+      width: 60%;
+      position: relative;
+      z-index: 1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    h1, h2 {
+      color: #ff99cc;
+      transition: color 0.3s ease;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      position: fixed;
+      top: 150px;
+      left: 20px;
+      color: #ffffff;
+      z-index: 2;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 12px 20px;
+      display: block;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ff99cc;
+    }
+
+    .main-content {
+      margin-left: 300px;
+      padding: 120px 50px 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+      opacity: 1;
+    }
+
+    figure {
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 0 12px #ff6699, 0 0 20px #ff0066, 0 0 30px #ff3399;
+      transition: all 0.3s ease-in-out;
+    }
+
+    figure img:hover {
+      box-shadow: 0 0 20px #ff6699, 0 0 40px #ff0066, 0 0 50px #ff3399;
+    }
+
+    figcaption {
+      font-style: italic;
+      margin-top: 8px;
+      color: #ddd;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 3;
+    }
+
+    ul {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    ul li {
+      color: #eee;
+      line-height: 1.6;
+    }
+
+    body.vampiro {
+      background: linear-gradient(to right, #1b0000, #4b0f1f);
+      color: #ffcccc;
+    }
+
+    body.vampiro .container {
+      background: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 25px rgba(255, 0, 77, 0.5);
+    }
+
+    body.vampiro figure img {
+      box-shadow: 0 0 25px #ff0066, 0 0 35px #ff3399, 0 0 40px #ff6699;
+    }
+
+    body.vampiro .sidebar ul li a {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #ff6699;
+    }
+
+    body.vampiro .sidebar ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ff0066;
+    }
+
+    .tab-content.initial {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .tab-content.initial img {
+      width: 100%;
+      height: 80vh;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 0, 77, 0.5);
+    }
+
+    .filme-detalhe {
+        display: none;
+      }
+      
+
+    .filme-detalhe img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 12px;
+      margin: 15px 0;
+      box-shadow: 0 0 15px #ff6699;
+    }
+
+    #filmes button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      background-color: #ff0066;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #filmes button:hover {
+      background-color: #cc0052;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+      .sidebar {
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <footer>
+    <h1>Saga Crepúsculo</h1>
+  </footer>
+
+  <nav class="sidebar">
+    <ul>
+      <li><a href="#" onclick="showTab('inicial')">Inicial</a></li>
+      <li><a href="#" onclick="showTab('sobre')">Sobre</a></li>
+      <li><a href="#" onclick="showTab('filmes')">Filmes</a></li>
+      <li><a href="#" onclick="showTab('personagens')">Personagens</a></li>
+      <li><a href="#" onclick="showTab('curiosidades')">Curiosidades</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-content">
+    <div class="container">
+
+      <div id="inicial" class="tab-content initial active">
+        <figure>
+          <img src="imagem1.jpeg" alt="Crepúsculo">
+        </figure>
+      </div>
+
+      <div id="sobre" class="tab-content">
+        <h2>Sobre a Saga</h2>
+        <p>A saga <strong>Crepúsculo</strong> A saga Crepúsculo, escrita por Stephenie Meyer, é uma saga de filmes que mistura romance, mistério e fantasia, explorando temas como amor proibido, imortalidade e as complexas relações entre seres humanos e criaturas sobrenaturais.</p>
+            <p> A história gira em torno de Bella Swan, uma jovem que se muda para a pequena cidade de Forks, no estado de Washington, e se apaixona por Edward Cullen, um vampiro. Ao longo de quatro filmes, a saga narra a evolução de seu relacionamento, seus desafios e a luta para conciliar os mundos humano e sobrenatural.</p>
+      </div>
+
+      <div id="filmes" class="tab-content">
+        <h2>Filmes da Saga</h2>
+        <ul>
+          <li>Crepúsculo (2008) <button onclick="scrollToFilme('filme-crepusculo')">Ver detalhes</button></li>
+          <li>Lua Nova (2009) <button onclick="scrollToFilme('filme-lua-nova')">Ver detalhes</button></li>
+          <li>Eclipse (2010) <button onclick="scrollToFilme('filme-eclipse')">Ver detalhes</button></li>
+          <li>Amanhecer - Parte 1 (2011) <button onclick="scrollToFilme('filme-amanhecer1')">Ver detalhes</button></li>
+          <li>Amanhecer - Parte 2 (2012) <button onclick="scrollToFilme('filme-amanhecer2')">Ver detalhes</button></li>
+        </ul>
+
+        <div id="filme-crepusculo" class="filme-detalhe">
+          <h3>Crepúsculo (2008)</h3>
+          <img src="imagem2.jpeg" alt="Crepúsculo">
+          <p>O primeiro filme da saga nos apresenta Bella Swan, uma adolescente que se muda para Forks para morar com seu pai, Charlie, após a separação dos pais. Lá, ela conhece Edward Cullen, um misterioso e bonito estudante, que é parte de uma família igualmente peculiar. Bella logo descobre que Edward é um vampiro, mas, ao contrário de outras lendas, ele e sua família se alimentam apenas de sangue animal, evitando caçar seres humanos.</p>
+          <p>A atração instantânea entre eles se transforma em um romance apaixonado, mas também perigoso. Edward tenta se afastar de Bella para protegê-la, temendo que seu lado vampírico seja um risco para ela. No entanto, a atração é irresistível, e Bella se envolve cada vez mais com ele, explorando o dilema de amar alguém que representa uma ameaça para sua própria vida. A história ganha tensão quando outros vampiros, mais agressivos e predadores, chegam à cidade, colocando em risco a vida de Bella.</p>
+          <p>O final do filme é marcado por um confronto com um dos vampiros, James, que tenta matar Bella. A família Cullen intercede para protegê-la, e, embora Bella seja salva, ela está cada vez mais imersa no mundo dos vampiros.</p>
+        </div>
+
+        <div id="filme-lua-nova" class="filme-detalhe">
+          <h3>Lua Nova (2009)</h3>
+          <img src="imagem3.jpeg" alt="Lua Nova">
+          <p>Em Lua Nova, o relacionamento entre Bella e Edward passa por uma grande crise. Após um evento trágico durante o aniversário de Bella, Edward decide deixá-la para protegê-la de si mesmo e de sua natureza vampírica. Bella fica devastada com a partida de Edward e mergulha em uma depressão profunda. Ela se isola de todos à sua volta, mas acaba encontrando consolo na amizade de Jacob Black, um jovem que revela ser um lobisomem.</p>
+          <P>A conexão de Bella e Jacob se fortalece ao longo do filme, e ela começa a encontrar um novo tipo de conforto e felicidade. No entanto, o vínculo de Bella com Edward nunca desaparece completamente. Bella, em sua dor, busca uma forma de sentir a presença de Edward e se envolve em situações perigosas para, de alguma forma, "ouvi-lo" novamente. Ao fazer isso, ela acaba desencadeando uma série de eventos que atraem novamente a atenção dos vampiros, culminando no retorno de Edward, que acredita erroneamente que Bella morreu.</P>
+          <p>O filme culmina em uma sequência de eventos em Volterra, na Itália, onde Edward, desesperado por pensar que Bella estava morta, está prestes a se entregar aos Volturi, uma família de vampiros governantes. Bella, com a ajuda de Alice (irmã de Edward), o impede, e o casal se reúne, com Edward agora decidido a nunca mais deixá-la.</p>
+        </div>
+
+        <div id="filme-eclipse" class="filme-detalhe">
+          <h3>Eclipse (2010)</h3>
+          <img src="imagem4.jpeg" alt="Eclipse">
+          <p>Eclipse é o terceiro filme da saga e continua a história do amor turbulento entre Bella e Edward, mas também aborda a crescente tensão com Jacob, que agora revela sua paixão por Bella e sua natureza de lobisomem. Este filme lida com as complicações da escolha de Bella entre os dois: Edward, o vampiro imortal, e Jacob, o lobisomem com quem ela desenvolve uma conexão profunda, mas de um tipo diferente.</p>
+          <p>Enquanto isso, uma ameaça maior se aproxima: um exército de vampiros está sendo criado por Victoria, uma vampira vingativa que quer se vingar de Bella pela morte de seu companheiro James. A guerra iminente entre os vampiros e os lobisomens leva a um grande confronto em Seattle, e Bella, Edward e Jacob precisam se unir para enfrentar essa ameaça. A tensão entre os personagens é palpável, especialmente quando Bella precisa tomar uma decisão difícil sobre seu futuro.</p>
+          <p>Ao longo do filme, Bella finalmente decide que quer ficar com Edward, mesmo sabendo que isso significa abrir mão de sua vida humana. Ela aceita seu destino e pede a Edward que a transforme em vampira, o que, apesar das suas próprias hesitações, ele concorda. No entanto, Jacob fica profundamente magoado com a escolha de Bella, e a amizade deles é colocada à prova.</p>
+        </div>
+
+        <div id="filme-amanhecer1" class="filme-detalhe">
+          <h3>Amanhecer - Parte 1 (2011)</h3>
+          <img src="imagem5.jpeg" alt="Amanhecer Parte 1">
+          <p>Em Amanhecer – Parte 1, o quarto e último filme da saga Crepúsculo começa com o tão esperado casamento de Bella Swan e Edward Cullen. O casamento acontece em uma cerimônia simples, mas cheia de emoção, em que Bella finalmente se torna esposa de Edward, prometendo ficar com ele para sempre. Após o casamento, o casal viaja para uma ilha particular, onde passam a lua de mel.</p>
+          <p>Logo após a lua de mel, Bella descobre que está grávida, e a gravidez se desenvolve a uma velocidade alarmante. O feto, que é híbrido (metade vampiro e metade humano), cresce rapidamente, colocando a vida de Bella em grave risco. Edward, preocupado, deseja que ela aborte a criança, mas Bella se recusa. O estado de saúde de Bella se deteriora devido à gestação acelerada, e ela fica cada vez mais frágil. O clímax do filme ocorre quando Bella, já muito debilitada, dá à luz a uma filha chamada Renesmee, que, para surpresa de todos, é saudável e cresce rapidamente.</p>
+          <p>No final, Bella morre durante o parto, mas é transformada por Edward em vampira para sobreviver e assim preservar sua vida.</p>
+        </div>
+
+        <div id="filme-amanhecer2" class="filme-detalhe">
+          <h3>Amanhecer - Parte 2 (2012)</h3>
+          <img src="imagem6.jpeg" alt="Amanhecer Parte 2">
+          <p>Amanhecer – Parte 2 começa com Bella já transformada em vampira. Ela luta para se acostumar com a sua nova vida imortal e com a transformação que a deixou mais forte e ágil. Bella agora é mãe de Renesmee, que cresce rapidamente e mostra habilidades especiais, como a capacidade de mostrar suas memórias para outras pessoas por meio do toque.</p>
+          <p>A família Cullen e seus aliados, incluindo Jacob Black, que agora tem uma ligação profunda com Renesmee, precisam enfrentar um grande desafio quando os Volturi, os governantes dos vampiros, ficam sabendo da existência de Renesmee. Eles acreditam que ela é uma criança imortal, algo proibido entre os vampiros, e decidem exterminá-la. Os Cullen, então, começam a reunir aliados de várias partes do mundo para provar que Renesmee não é uma ameaça e que não deve ser morta.</p>
+          <p>A tensão culmina em um confronto entre os Cullen e os Volturi, mas, ao contrário do que todos esperavam, a batalha é evitada graças à habilidade de Alice Cullen, que mostra aos Volturi que Renesmee é uma criança híbrida, não uma criança imortal. Isso resolve o conflito e os Volturi aceitam que Renesmee e os Cullen não representam perigo.</p>
+          <p>No final, Bella e Edward celebram sua vida juntos, com sua filha e seus amigos, agora em paz. A saga termina com um clima de felicidade e esperança para o futuro da família Cullen.</p>
+        </div>
+      </div>
+
+      <div id="personagens" class="tab-content">
+        <h2>Personagens Principais</h2>
+        <li>Bella Swan - Kristen Stewart</li>
+
+        <li>Edward Cullen - Robert Pattinson</li>
+            
+        <li>Jacob Black - Taylor Lautner</li>
+            
+        <li>Renesmee Cullen - Mackenzie Foy</li>
+            
+        <li>Alice Cullen - Ashley Greene</li>
+            
+        <li>Jasper Hale - Jackson Rathbone</li>
+            
+        <li>Emmett Cullen - Kellan Lutz</li>
+            
+        <li>Rosalie Hale - Nikki Reed</li>
+            
+        <li>Carlisle Cullen - Peter Facinelli</li>
+            
+        <li>Esme Cullen - Elizabeth Reaser</li>
+            
+        <li>Charlie Swan - Billy Burke</li>
+            
+        <li>Renee Dwyer - Sarah Clarke</li>
+            
+        <li>Aro - Michael Sheen</li>
+            
+        <li>Caius - Jamie Campbell Bower</li>
+            
+        <li>Marcus - Christopher Heyerdahl</li>
+            
+        <li>Jane - Dakota Fanning</li>
+            
+        <li>Alec - Cameron Bright</li>
+            
+        <li>Victoria - Bryce Dallas Howard</li>
+            
+        <li>Riley Biers - Xavier Samuel</li>
+            
+        <li>Quil Ateara - Tyson Houseman</li>
+            
+        <li>Leah Clearwater - Julia Jones</li>
+      </div>
+
+      <div id="curiosidades" class="tab-content">
+        <h2>Curiosidades</h2>
+        <p>Uma curiosidade interessante sobre o filme Amanhecer – Parte 1 e Parte 2 é que, durante as filmagens, Robert Pattinson (Edward Cullen) teve que aprender a fazer o parto de Bella em uma das cenas mais intensas da história.</p>
+        <p>Na sequência em que Bella dá à luz a Renesmee, o processo é mostrado de uma forma dramática, com Bella quase morrendo durante o parto.</p>
+        <p>Para essa cena, Pattinson teve que aprender a realizar uma manobra de emergência, o que envolvia simular um parto de forma convincente, mas sem ser um procedimento real.</p>
+        <p>O elenco passou por um treinamento específico para garantir que as cenas fossem realistas e seguras para todos os envolvidos.</p> 
+        <p>A intensidade emocional dessa sequência foi uma das mais desafiadoras tanto para os atores quanto para a equipe de produção.</p>
+      </div>
+      <div id="filme-crepusculo" class="filme-detalhe" style="display: none;">
+    </div> 
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      const tabs = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) activeTab.classList.add('active');
+    }
+
+    function scrollToFilme(id) {
+       
+        const filmes = document.querySelectorAll('.filme-detalhe');
+        filmes.forEach(filme => filme.style.display = 'none');
+      
+       
+        const filmeSelecionado = document.getElementById(id);
+        if (filmeSelecionado) {
+          filmeSelecionado.style.display = 'block';
+          filmeSelecionado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+      
+    document.addEventListener('DOMContentLoaded', () => {
+      showTab('inicial');
+    });
+  </script>
+
+</body>
+</html>
